@@ -51,7 +51,7 @@ func handlePostEvents(w http.ResponseWriter, r *http.Request) {
 
 	err = json.Unmarshal(body, &rawEvents)
 
-	if err != nil {
+	if err != nil || rawEvents == nil {
 		writeJSON(w, http.StatusBadRequest,
 			map[string]string{"error": "expected JSON array"})
 		return

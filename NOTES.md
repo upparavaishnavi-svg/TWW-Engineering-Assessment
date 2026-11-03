@@ -42,9 +42,9 @@ and provide campaign statistics through REST APIs.
 2. Validate incoming events.
 3. Prevent duplicate events.
 4. Build campaign statistics API.
-5. Test malformed and duplicate events.
-6. Debug the provided Go program.
-7. Document scaling considerations.
+5. Test malformed, duplicate, and concurrent events.
+6. Run automated tests, race detection, and static analysis.
+7. Debug the provided Go program and document scaling considerations.
 ## 6. Scale Memo – 100 Million Events Per Day
 
 ### What breaks first?
@@ -148,31 +148,30 @@ the campaign has already sent all messages.
 ## 8. What I Completed / What I Intentionally Skipped
 
 ### Completed
-- Implemented POST /events endpoint.
-- Implemented GET /campaigns/{campaignID}/stats endpoint.
-- Added event validation.
-- Added duplicate event detection.
-- Tested the service with the provided seed data.
+- Implemented POST /events and GET /campaigns/{campaign_id}/stats.
+- Added event validation and duplicate detection.
+- Implemented partial batch processing.
+- Processed the provided seed data.
+- Added six automated backend tests.
+- Verified tests using the Go race detector.
+- Ran go vet successfully.
 - Fixed all four bugs in the debugging exercise.
 - Verified debugging output against expected_output.txt.
-- Ran the debugging program with the Go race detector.
-- Documented assumptions, scaling considerations and the marketer scenario.
+- Documented assumptions, design decisions, and scaling considerations.
 
 ### Intentionally Skipped
 - Persistent database storage.
 - Event pagination.
 - Frontend implementation.
-- Distributed deployment and queue infrastructure.
-- Automated unit test files.
+- Distributed deployment and message queue infrastructure.
 
 These were skipped to prioritize the core backend requirements within the available time.
-
 ## 9. If I Had Another Day
 
-- Add automated unit and integration tests.
 - Implement persistent storage using SQLite or PostgreSQL.
-- Improve duplicate conflict handling.
-- Add pagination for event retrieval.
+- Improve duplicate conflict handling when the same event ID arrives with different payloads.
+- Add pagination for retrieving events.
 - Improve API error responses and validation.
-- Add monitoring and structured logging.
-- Test concurrent API requests more thoroughly.
+- Add structured logging and monitoring.
+- Add more integration tests for API behaviour and edge cases.
+- Test performance with larger event batches.
