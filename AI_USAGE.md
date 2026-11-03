@@ -13,9 +13,9 @@ ChatGPT
 - To improve project documentation, including README.md and NOTES.md.
 
 ## Suggestions I Changed or Reconsidered
-I chose in-memory storage instead of adding a database because I wanted to complete and test the core requirements within the available time.
+I considered adding persistent database storage, such as SQLite. However, I chose in-memory storage because I wanted to complete and test the core requirements within the available time. I understand that persistent storage would be necessary for a production system.
 
-I also reviewed the suggested implementation and tested the behaviour rather than accepting suggestions without verification.
+I also reviewed the suggested implementation and tested its behaviour rather than accepting suggestions without verification.
 
 ## What AI Helped Me Understand
 AI helped me understand:
@@ -25,10 +25,12 @@ AI helped me understand:
 - How partial batch processing allows valid events to be accepted even when other events are invalid.
 - How the Go race detector helps identify concurrency problems.
 
-## AI-Generated Code That Needed Debugging
-During the debugging exercise, I encountered a syntax error caused by an extra closing brace while editing the tracking function. I corrected the code, formatted it using gofmt, and verified the output against expected_output.txt.
+## AI-Assisted Code That Needed Debugging
+I used ChatGPT to help draft and understand parts of the Go backend implementation, including event validation, duplicate detection, campaign statistics, and automated tests.
 
-I also reviewed and tested the backend implementation, including its validation and concurrent request handling.
+During implementation, I encountered a syntax error caused by an extra closing brace while editing the tracking function. I corrected the brace, formatted the code using gofmt, and verified the program against the expected output.
+
+I also reviewed the AI-assisted implementation, corrected issues encountered during integration, and verified the final behaviour using automated tests and the Go race detector.
 
 ## Verification
 - Ran automated backend tests using go test -v ./...
