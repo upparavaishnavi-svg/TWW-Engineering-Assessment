@@ -110,25 +110,71 @@ func TestCampaignStats(t *testing.T) {
 	resetEvents()
 
 	events["evt1"] = Event{
-		EventID: "evt1", CampaignID: "cmp1", Type: "sent",
+		EventID:    "evt1",
+		CampaignID: "cmp1",
+		Type:       "sent",
 	}
-
 	events["evt2"] = Event{
-		EventID: "evt2", CampaignID: "cmp1", Type: "opened",
+		EventID:    "evt2",
+		CampaignID: "cmp1",
+		Type:       "delivered",
+	}
+	events["evt3"] = Event{
+		EventID:    "evt3",
+		CampaignID: "cmp1",
+		Type:       "opened",
+	}
+	events["evt4"] = Event{
+		EventID:    "evt4",
+		CampaignID: "cmp1",
+		Type:       "clicked",
 	}
 
-	req := httptest.NewRequest(http.MethodGet, "/campaigns/cmp1/stats", nil)
+	req := httptest.NewRequest(
+		http.MethodGet,
+		"/campaigns/cmp1/stats",
+		nil,
+	)
 	req.SetPathValue("campaignID", "cmp1")
 
 	rec := httptest.NewRecorder()
-
 	handleGetStats(rec, req)
 
 	if rec.Code != http.StatusOK {
 		t.Fatalf("expected status 200, got %d", rec.Code)
 	}
-}
 
+	var response struct {
+		CampaignID string         `json:"campaign_id"`
+		Stats      map[string]int `json:"stats"`
+	}
+
+	if err := json.Unmarshal(rec.Body.Bytes(), &response); err != nil {
+		t.Fatalf("failed to decode response: %v", err)
+	}
+
+	if response.CampaignID != "cmp1" {
+		t.Fatalf("expected campaign cmp1, got %s", response.CampaignID)
+	}
+
+	expected := map[string]int{
+		"sent":      1,
+		"delivered": 1,
+		"opened":    1,
+		"clicked":   1,
+	}
+
+	for eventType, count := range expected {
+		if response.Stats[eventType] != count {
+			t.Errorf(
+				"expected %s count %d, got %d",
+				eventType,
+				count,
+				response.Stats[eventType],
+			)
+		}
+	}
+}
 func TestConcurrentDuplicateRequests(t *testing.T) {
 	resetEvents()
 
